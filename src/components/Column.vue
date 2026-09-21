@@ -2,15 +2,20 @@
   <div class="column" :class="columnAccentClass">
     <h3>{{ column.title }}</h3>
 
-    <draggable :list="cards" group="cards" @change="handleChange">
-      <transition-group name="card-fade" tag="div" class="cards">
-        <Card
-          v-for="card in cards"
-          :key="card.id"
-          :card="card"
-          :column-id="column.id"
-        />
-      </transition-group>
+    <draggable
+      class="cards"
+      :list="cards"
+      group="cards"
+      item-key="id"
+      tag="transition-group"
+      :component-data="{ name: 'card-fade', tag: 'div' }"
+      @change="handleChange"
+    >
+      <template #item="{ element }">
+        <div>
+          <Card :card="element" :column-id="column.id" />
+        </div>
+      </template>
     </draggable>
 
     <form class="add-form" @submit.prevent="handleAdd">
@@ -23,7 +28,7 @@
 <script>
 import { mapGetters } from "vuex";
 import Card from "./Card.vue";
-import draggable from "vuedraggable";
+import draggable from "zhyswan-vuedraggable";
 
 export default {
   name: "Column",
@@ -131,7 +136,7 @@ export default {
 .card-fade-leave-active {
   transition: all 0.2s ease;
 }
-.card-fade-enter,
+.card-fade-enter-from,
 .card-fade-leave-to {
   opacity: 0;
   transform: translateY(-8px);
