@@ -1,9 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from 'vuex'
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     columns: [
       { id: "col-1", title: "Por hacer", cardIds: [] },
@@ -14,14 +11,14 @@ export default new Vuex.Store({
   },
   mutations: {
     ADD_CARD(state, { columnId, card }) {
-      Vue.set(state.cards, card.id, card);
+      state.cards[card.id] = card;
       const column = state.columns.find((c) => c.id === columnId);
       column.cardIds.push(card.id);
     },
     REMOVE_CARD(state, { columnId, cardId }) {
       const column = state.columns.find((c) => c.id === columnId);
       column.cardIds = column.cardIds.filter((id) => id !== cardId);
-      Vue.delete(state.cards, cardId);
+      delete state.cards[cardId];
     },
     UPDATE_CARD_TITLE(state, { cardId, title }) {
       state.cards[cardId].title = title;
